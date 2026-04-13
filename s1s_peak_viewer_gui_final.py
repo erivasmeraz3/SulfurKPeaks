@@ -4963,12 +4963,10 @@ class S1sPeakViewerFinal:
                     if not self.peak_in_fit[peak_name].get():
                         continue
 
-                    if peak_name == 'Sulfonate':
-                        fwhm = params_dict.get('ox_fwhm', 0.8)
-                    elif peak_name == 'Sulfate':
-                        fwhm = params_dict.get('ox_fwhm', 0.6)
+                    if peak_name in ('Sulfone', 'Sulfonate', 'Sulfate'):
+                        fwhm = params_dict.get('ox_fwhm', 2.0)
                     else:
-                        fwhm = params_dict.get('red_fwhm', 1.5)
+                        fwhm = params_dict.get('red_fwhm', 1.7)
 
                     center = params_dict.get(f'c{j+1}', self.default_peak_centers[peak_name])
                     height = params_dict.get(f'h{j+1}', 0)
