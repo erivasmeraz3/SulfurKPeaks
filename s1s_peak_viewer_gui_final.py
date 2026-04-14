@@ -4671,7 +4671,7 @@ class S1sPeakViewerFinal:
 
                 # Export raw + fitted spectrum data
                 # Safely get parameter values, excluding computed params
-                excluded = {'baseline_total'}
+                excluded = {'baseline_total', 'arc_width', 'shared_fwhm'}
                 params_dict = {p: result.params[p].value for p in result.params if p not in excluded}
 
                 baseline = double_arctangent(energy,
@@ -4906,14 +4906,14 @@ class S1sPeakViewerFinal:
                     print(f"Error loading {name}: {e}")
                     # Use model data as fallback
                     from s1s_fitter_optimized import total_model
-                    excluded = {'baseline_total'}
+                    excluded = {'baseline_total', 'arc_width', 'shared_fwhm'}
                     params = {p: result.params[p].value for p in result.params if p not in excluded}
                     model_intensity = total_model(energy, **params)
                     sample_data.append((name, result, energy, model_intensity))
             else:
                 # Use model data
                 from s1s_fitter_optimized import total_model
-                excluded = {'baseline_total'}
+                excluded = {'baseline_total', 'arc_width', 'shared_fwhm'}
                 params = {p: result.params[p].value for p in result.params if p not in excluded}
                 model_intensity = total_model(energy, **params)
                 sample_data.append((name, result, energy, model_intensity))
@@ -4940,8 +4940,8 @@ class S1sPeakViewerFinal:
 
             # Calculate total fit
             from s1s_fitter_optimized import total_model, double_arctangent, gaussian
-            # Filter out computed parameters like baseline_total that aren't function arguments
-            excluded_params = {'baseline_total'}
+            # Filter out computed/expression parameters that aren't total_model() arguments
+            excluded_params = {'baseline_total', 'arc_width', 'shared_fwhm'}
             params_dict = {p: result.params[p].value for p in result.params if p not in excluded_params}
             total_fit = total_model(energy, **params_dict)
 
@@ -5072,7 +5072,7 @@ class S1sPeakViewerFinal:
             from s1s_fitter_optimized import total_model, double_arctangent, gaussian
 
             # Calculate model components
-            excluded = {'baseline_total'}
+            excluded = {'baseline_total', 'arc_width', 'shared_fwhm'}
             params_dict = {p: result.params[p].value for p in result.params if p not in excluded}
 
             baseline = double_arctangent(energy,
